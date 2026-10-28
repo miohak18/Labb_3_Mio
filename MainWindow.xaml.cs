@@ -1,13 +1,6 @@
-﻿using System.Text;
+﻿using Labb_3_Mio.Models;
+using Labb_3_Mio.ViewModels;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Labb_3_Mio
 {
@@ -19,6 +12,17 @@ namespace Labb_3_Mio
         public MainWindow()
         {
             InitializeComponent();
+
+            var pack = new QuestionPack("Mina Frågor");
+
+            DataContext = new QuestionPackViewModel(pack);
         }
+
+        //private void Button_Click(object sender, RoutedEventArgs e)
+        //{
+        //    (DataContext as QuestionPackViewModel).Difficulty = Difficulty.Easy;
+        //    (DataContext as QuestionPackViewModel).TimeLimitInSeconds = 999;
+        //}
+
     }
 }
