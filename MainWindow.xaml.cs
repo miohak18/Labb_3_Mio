@@ -13,16 +13,8 @@ namespace Labb_3_Mio
         {
             InitializeComponent();
 
-            var pack = new QuestionPack("Mina Frågor");
-
-            DataContext = new QuestionPackViewModel(pack);
+            DataContext = new MainWindowViewModel();
         }
-
-        //private void Button_Click(object sender, RoutedEventArgs e)
-        //{
-        //    (DataContext as QuestionPackViewModel).Difficulty = Difficulty.Easy;
-        //    (DataContext as QuestionPackViewModel).TimeLimitInSeconds = 999;
-        //}
 
     }
 }
