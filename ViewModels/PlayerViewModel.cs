@@ -1,6 +1,6 @@
 ﻿namespace Labb_3_Mio.ViewModels;
 
-internal class PlayerViewModel
+internal class PlayerViewModel : ViewModelBase
 {
     private readonly MainWindowViewModel? _mainWindowViewModel;
 

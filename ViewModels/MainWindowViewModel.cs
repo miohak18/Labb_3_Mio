@@ -12,7 +12,13 @@ internal class MainWindowViewModel : ViewModelBase
     public QuestionPackViewModel ActivePack
     {
         get => _activePack;
-        set => SetProperty(ref _activePack, value);
+        set
+        {
+            if (SetProperty(ref _activePack, value)) ;
+            {
+                ConfigurationViewModel?.RaiseActivePackChanged();
+            }
+        }
     }
 
     public PlayerViewModel? PlayerViewModel { get; }
@@ -25,7 +31,7 @@ internal class MainWindowViewModel : ViewModelBase
 
         var questionPack = new Models.QuestionPack("Mina Frågor!", Difficulty.Easy);
         questionPack.Questions.Add(new Models.Question("Vad heter sveriges huvudstad?", "Stockholm", "Oslo", "Göteborg", "London"));
-        questionPack.Questions.Add(new Models.Question("Vad heter sveriges största sjö?", "Vänern", "Vättern", "Mälaren", "Storsjön"));
+        questionPack.Questions.Add(new Models.Question("Vad är 2 + 3?", "4", "5", "6", "7"));
 
         ActivePack = new QuestionPackViewModel(questionPack);
     }
