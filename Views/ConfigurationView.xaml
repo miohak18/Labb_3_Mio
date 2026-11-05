@@ -4,11 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Labb_3_Mio.Views"
+             xmlns:views="clr-namespace:Labb_3_Mio.Views"
              mc:Ignorable="d" 
              DataContext="{Binding ConfigurationViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <StackPanel>
+        <!--<StackPanel>
             <TextBox Text="{Binding DemoText, UpdateSourceTrigger=PropertyChanged}"/>
             <Button
                 VerticalAlignment="Center"
@@ -17,6 +18,23 @@
                 Command="{Binding ChangePackNameCommand}"
                 CommandParameter="My sample parameter"
                 />
-        </StackPanel>
+        </StackPanel>-->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <ListBox
+            Grid.Column="0"    
+            x:Name="QuestionList"
+            ItemsSource="{Binding QuestionPack}"
+            DisplayMemberPath="Text"
+        />
+        <Grid Grid.Column="1">
+
+        </Grid>
     </Grid>
 </UserControl>

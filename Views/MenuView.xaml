@@ -10,16 +10,25 @@
         <Menu>
             <MenuItem Header="_File">
                 <MenuItem Header="_New Question pack"/>
+                <MenuItem Header="Select Question Pack"/>
+                <MenuItem Header="Delete Question Pack"/>
+                <MenuItem Header="Import Questions" InputGestureText="Ctrl+I"/>
+                <Separator/>
                 <MenuItem Header="E_xit" InputGestureText="Alt+F4"/>
             </MenuItem>
             <MenuItem Header="_Edit">
+                <MenuItem Header="Add Question" InputGestureText="Ctrl+A"/>
+                <MenuItem Header="Remove Question" InputGestureText="Ctrl+R"/>
                 <MenuItem Header="Set Pack _Name" 
                  InputGestureText="Ctrl+N"
                  Command="{Binding ConfigurationViewModel.ChangePackNameCommand}"/>
-                <MenuItem Header="Copy"/>
-                <MenuItem Header="Paste"/>
+                <MenuItem Header="Pack Options" InputGestureText="Ctrl+O"/>
             </MenuItem>
-            <MenuItem Header="_View"/>
+            <MenuItem Header="_View">
+                <MenuItem Header="Play" InputGestureText="Ctrl+P"/>
+                <MenuItem Header="Edit" InputGestureText="Ctrl+E"/>
+                <MenuItem Header="Fullscreen" InputGestureText="Alt+Enter"/>
+            </MenuItem>
         </Menu>
     </Grid>
 </UserControl>
