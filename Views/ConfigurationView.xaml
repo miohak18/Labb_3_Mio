@@ -7,34 +7,44 @@
              xmlns:views="clr-namespace:Labb_3_Mio.Views"
              mc:Ignorable="d" 
              DataContext="{Binding ConfigurationViewModel}"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             FontSize="14">
     <Grid>
-        <!--<StackPanel>
-            <TextBox Text="{Binding DemoText, UpdateSourceTrigger=PropertyChanged}"/>
-            <Button
-                VerticalAlignment="Center"
-                HorizontalAlignment="Center"
-                Content="{Binding ActivePack.Name}"
-                Command="{Binding ChangePackNameCommand}"
-                CommandParameter="My sample parameter"
-                />
-        </StackPanel>-->
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="33.029"/>
+            <ColumnDefinition Width="33.029"/>
+            <ColumnDefinition Width="33.333"/>
+            <ColumnDefinition Width="4*"/>
         </Grid.ColumnDefinitions>
-        <ListBox
-            Grid.Column="0"    
+        <Grid.RowDefinitions>
+            <RowDefinition Height="33.3"/>
+            <RowDefinition Height="418*"/>
+        </Grid.RowDefinitions>
+        <Button Grid.Row="0" Grid.Column="3" Margin="5,5,5,5" x:Name="packOptions"/>
+        <Button Grid.Row="0" Grid.Column="4" Margin="5,5,5,5" x:Name="addQuestion"/>
+        <Button Grid.Row="0" Grid.Column="5" Margin="5,5,5,5" x:Name="removeQuestion"/>
+        <Label Grid.Row="0" Grid.Column="0" Margin="5 3 5 0" Content="Questionpack Name" Grid.ColumnSpan="3" FontWeight="Bold"/>
+        <StackPanel Grid.ColumnSpan="6" Grid.Row="1"  Orientation="Vertical">
+            <ListBox
             x:Name="QuestionList"
             ItemsSource="{Binding QuestionPack}"
-            DisplayMemberPath="Text"
+            DisplayMemberPath="Text" Height="350"
         />
-        <Grid Grid.Column="1">
-
-        </Grid>
+        </StackPanel>
+        <StackPanel Grid.Column="6" Grid.RowSpan="2"   Orientation="Vertical">
+            <Label Content="Question:" Margin="10 5 0 0" FontWeight="Bold"/>
+            <TextBox Margin="14 0 14 20"  TextWrapping="Wrap" Height="65" x:Name="questionTextBox"/>
+            <Label Content="Correct answer:" Margin="10 10 0 0" FontWeight="Bold"/>
+            <TextBox Margin="14 0 14 0" x:Name="correctAnswer"/>
+            <Label Content="First incorrect answer:" Margin="10 0 0 0" FontWeight="Bold" x:Name="incorrectAnswer1"/>
+            <TextBox Margin="14 0 14 0"/>
+            <Label Content="Second incorrect answer:" Margin="10 0 0 0" FontWeight="Bold" x:Name="incorrectAnswer2"/>
+            <TextBox Margin="14 0 14 0"/>
+            <Label Content="Third incorrect answer:" Margin="10 0 0 0" FontWeight="Bold" x:Name="incorrectAnswer3"/>
+            <TextBox Margin="14 0 14 0"/>
+        </StackPanel>
     </Grid>
 </UserControl>

@@ -16,7 +16,7 @@ internal class MainWindowViewModel : ViewModelBase
         {
             if (SetProperty(ref _activePack, value)) ;
             {
-                ConfigurationViewModel?.RaiseActivePackChanged();
+                PlayerViewModel?.RaiseActivePackChanged();
             }
         }
     }
