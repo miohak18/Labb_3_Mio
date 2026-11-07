@@ -17,12 +17,12 @@ internal class QuestionPackViewModel : ViewModelBase
 
     public string Name
     {
-        get => _model.Name;
+        get => _model.PackName;
         set {
-            if (_model.Name == value)
+            if (_model.PackName == value)
                 return;
 
-            _model.Name = value;
+            _model.PackName = value;
             RaisePropertyChanged();
         }
     }

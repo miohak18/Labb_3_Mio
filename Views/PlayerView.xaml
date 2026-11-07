@@ -4,10 +4,72 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Labb_3_Mio.Views"
+             xmlns:views="clr-namespace:Labb_3_Mio.Views"
              mc:Ignorable="d" 
              DataContext="{Binding PlayerViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Button Content="Click Me!" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="{Binding TimeRemaining}" 
+                   FontSize="30"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Right"
+                   Margin="0 0 20 0"/>
+
+        <TextBlock Grid.Row="1"
+                   Text="Binding current question"
+                   FontWeight="SemiBold"
+                   HorizontalAlignment="Center"
+                   FontSize="35"
+                   Margin="0, 40 0 10"
+                   />
+        <TextBlock Grid.Row="2"
+                   FontSize="20"
+                   HorizontalAlignment="Center"
+                   Text="Binding QuestionIndex, StringFormat=Question {0} of {TotalQuestions"/>
+
+        <Grid Grid.Row="3" Margin="30">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Row="0" Grid.Column="0"
+            Content="{Binding Answer1}"
+            Command="{Binding AnswerCommand}"
+            CommandParameter="{Binding Answer1}"
+            FontSize="20" Margin="20"/>
+
+
+            <Button Grid.Row="0" Grid.Column="1"
+            Content="{Binding Answer2}"
+            Command="{Binding AnswerCommand}"
+            CommandParameter="{Binding Answer2}"
+            FontSize="20" Margin="20"/>
+
+
+            <Button Grid.Row="1" Grid.Column="0"
+            Content="{Binding Answer3}"
+            Command="{Binding AnswerCommand}"
+            CommandParameter="{Binding Answer3}"
+            FontSize="20" Margin="20"/>
+
+
+            <Button Grid.Row="1" Grid.Column="1"
+            Content="{Binding Answer4}"
+            Command="{Binding AnswerCommand}"
+            CommandParameter="{Binding Answer4}"
+            FontSize="20" Margin="20"/>
+        </Grid>
     </Grid>
 </UserControl>

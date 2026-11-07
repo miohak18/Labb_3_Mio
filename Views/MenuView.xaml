@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Labb_3_Mio.Views"
+             DataContext="{Binding ConfigurationViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -17,12 +18,12 @@
                 <MenuItem Header="E_xit" InputGestureText="Alt+F4"/>
             </MenuItem>
             <MenuItem Header="_Edit">
-                <MenuItem Header="Add Question" InputGestureText="Ctrl+A"/>
-                <MenuItem Header="Remove Question" InputGestureText="Ctrl+R"/>
+                <MenuItem Header="Add Question" InputGestureText="Ctrl+A" Command="{Binding AddQuestionCommand}"/>
+                <MenuItem Header="Remove Question" InputGestureText="Ctrl+R" Command="{Binding RemoveQuestionCommand}"/>
                 <MenuItem Header="Set Pack _Name" 
                  InputGestureText="Ctrl+N"
-                 Command="{Binding ConfigurationViewModel.ChangePackNameCommand}"/>
-                <MenuItem Header="Pack Options" InputGestureText="Ctrl+O"/>
+                 Command="{Binding PlayerViewModel.ChangePackNameCommand}"/>
+                <MenuItem Header="Pack Options" InputGestureText="Ctrl+O" Command="{Binding PackOptionsCommand}"/>
             </MenuItem>
             <MenuItem Header="_View">
                 <MenuItem Header="Play" InputGestureText="Ctrl+P"/>
