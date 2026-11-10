@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using Labb_3_Mio.Models;
 
 namespace Labb_3_Mio.Views
 {

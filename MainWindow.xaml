@@ -15,10 +15,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
         <views:MenuView Grid.Row="0"/>
-        <!--views:PlayerView Grid.Row="1"/-->
-        <views:ConfigurationView Grid.Row="1"/>
-        <!--views:PackOptions Grid.Row="1" /-->
+        <views:PlayerView Grid.Row="1" Visibility="{Binding VisiblePlayerView}"/>
+        <views:ConfigurationView Grid.Row="1" Visibility="{Binding VisibilityConfigurationView}"/>
     </Grid>
 </Window>
