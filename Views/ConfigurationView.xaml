@@ -5,9 +5,20 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Labb_3_Mio.Views"
              xmlns:views="clr-namespace:Labb_3_Mio.Views"
+             xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              FontSize="14">
+    <UserControl.InputBindings>
+        <KeyBinding Key="Delete" 
+                    Command="{Binding ConfigurationViewModel.RemoveQuestionCommand}"/>
+
+        <KeyBinding Key="Insert" 
+                    Command="{Binding ConfigurationViewModel.AddQuestionCommand}"/>
+
+        <KeyBinding Key="O" Modifiers="Ctrl" 
+                    Command="{Binding ConfigurationViewModel.PackOptionsCommand}"/>
+    </UserControl.InputBindings>
     <Grid DataContext="{Binding ConfigurationViewModel}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -22,9 +33,19 @@
             <RowDefinition Height="33.3"/>
             <RowDefinition Height="418*"/>
         </Grid.RowDefinitions>
-        <Button Grid.Row="0" Grid.Column="3" Margin="5,5,5,5" x:Name="packOptions" Command="{Binding PackOptionsCommand}" ToolTip="Pack Options"/>
-        <Button Grid.Row="0" Grid.Column="4" Margin="5,5,5,5" x:Name="addQuestion" Command="{Binding AddQuestionCommand}" ToolTip="Add question"/>
-            <Button Grid.Row="0" Grid.Column="5" Margin="5,5,5,5" x:Name="removeQuestion" Command="{Binding RemoveQuestionCommand}" ToolTip="Remove question"/>
+        <Button Grid.Row="0" Grid.Column="3" Margin="5,5,5,5"
+                Content="{fa:Icon Sliders}"
+                x:Name="packOptions" 
+                Command="{Binding PackOptionsCommand}" 
+                ToolTip="Pack Options (Ctrl+O)"/>
+        <Button Grid.Row="0" Grid.Column="4" 
+                Margin="5,5,5,5" 
+                Content="{fa:Icon Plus}" x:Name="addQuestion" 
+                Command="{Binding AddQuestionCommand}" ToolTip="Add question (Insert"/>
+        <Button Grid.Row="0" Grid.Column="5" 
+                Margin="5,5,5,5" 
+                Content="{fa:Icon Minus}" x:Name="removeQuestion" 
+                Command="{Binding RemoveQuestionCommand}" ToolTip="Remove question (Delete)"/>
         <Label Grid.Row="0" Grid.Column="0" Margin="5 3 5 0" Content="Questionpack Name" Grid.ColumnSpan="3" FontWeight="Bold"/>
         <StackPanel Grid.ColumnSpan="6" Grid.Row="1"  Orientation="Vertical">
             <ListBox
@@ -38,14 +59,19 @@
         <StackPanel Grid.Column="6" Grid.RowSpan="2"   Orientation="Vertical">
             <Label Content="Question:" Margin="10 5 0 0" FontWeight="Bold"/>
             <TextBox Margin="14 0 14 20"  TextWrapping="Wrap" Height="65" x:Name="questionTextBox" Text="{Binding EditQuery, UpdateSourceTrigger=PropertyChanged}"/>
+            
             <Label Content="Correct answer:" Margin="10 10 0 0" FontWeight="Bold"/>
             <TextBox Margin="14 0 14 0" x:Name="correctAnswer" Text="{Binding EditCorrectAnswer, UpdateSourceTrigger=PropertyChanged}"/>
+            
             <Label Content="First incorrect answer:" Margin="10 0 0 0" FontWeight="Bold"/>
             <TextBox Margin="14 0 14 0" x:Name="incorrectAnswer1" Text="{Binding EditIncorrectAnswer1, UpdateSourceTrigger=PropertyChanged}"/>
+            
             <Label Content="Second incorrect answer:" Margin="10 0 0 0" FontWeight="Bold"/>
             <TextBox Margin="14 0 14 0" x:Name="incorrectAnswer2" Text="{Binding EditIncorrectAnswer2, UpdateSourceTrigger=PropertyChanged}"/>
+            
             <Label Content="Third incorrect answer:" Margin="10 0 0 0" FontWeight="Bold"/>
             <TextBox Margin="14 0 14 0" x:Name="incorrectAnswer3" Text="{Binding EditIncorrectAnswer3, UpdateSourceTrigger=PropertyChanged}"/>
+            
             <Button x:Name="SaveQuestionButton" 
                     Content="Save question" 
                     Command="{Binding SaveQuestionCommand}"

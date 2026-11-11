@@ -117,9 +117,9 @@ internal class ConfigurationViewModel :ViewModelBase
         {
             EditQuery = SelectedQuestion.Query;
             EditCorrectAnswer = SelectedQuestion.CorrectAnswer;
-            EditIncorrectAnswer1 = SelectedQuestion.IncorrectAnswers.Length > 0 ? SelectedQuestion.IncorrectAnswers[0] : string.Empty;
-            EditIncorrectAnswer2 = SelectedQuestion.IncorrectAnswers.Length > 1 ? SelectedQuestion.IncorrectAnswers[1] : string.Empty;
-            EditIncorrectAnswer3 = SelectedQuestion.IncorrectAnswers.Length > 2 ? SelectedQuestion.IncorrectAnswers[2] : string.Empty;
+            EditIncorrectAnswer1 = SelectedQuestion.IncorrectAnswers[0];
+            EditIncorrectAnswer2 = SelectedQuestion.IncorrectAnswers[1];
+            EditIncorrectAnswer3 = SelectedQuestion.IncorrectAnswers[2];
         }
         else
         {

@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace Labb_3_Mio.Models;
 
-internal class Question : INotifyPropertyChanged
+public class Question : INotifyPropertyChanged
 {
     public Question(string query, string correctAnswer, string incorrectAnswer1, string incorrectAnswer2, string incorrectAnswer3)
     {

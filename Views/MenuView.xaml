@@ -3,28 +3,53 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              xmlns:local="clr-namespace:Labb_3_Mio.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Menu>
-            <MenuItem Header="_File">
-                <MenuItem Header="_New Question pack"/>
-                <MenuItem Header="Select Question Pack"/>
-                <MenuItem Header="Delete Question Pack"/>
-                <MenuItem Header="Import Questions" InputGestureText="Ctrl+I"/>
+            <MenuItem Header=" _File">
+                <MenuItem Header="_New Question Pack" 
+                      Icon="{fa:Icon filecircleplus}" 
+                      Command="{Binding NewQuestionPackCommand}"/>
+
+                <MenuItem Header="_Select Question Pack" 
+                      Icon="{fa:Icon FolderOpen}"
+                      ItemsSource="{Binding Packs}">
+                    <MenuItem.ItemContainerStyle>
+                        <Style TargetType="MenuItem">
+                            <Setter Property="Header" Value="{Binding Name}"/>
+                            <Setter Property="Command" Value="{Binding DataContext.SelectPackCommand, RelativeSource={RelativeSource AncestorType=Menu}}"/>
+                            <Setter Property="CommandParameter" Value="{Binding}"/>
+                        </Style>
+                    </MenuItem.ItemContainerStyle>
+                </MenuItem>
+                <MenuItem Header="_Delete Question Pack" 
+                      Icon="{fa:Icon Trashcan}"
+                      ItemsSource="{Binding Packs}">
+                    <MenuItem.ItemContainerStyle>
+                        <Style TargetType="MenuItem">
+                            <Setter Property="Header" Value="{Binding Name}"/>
+                            <Setter Property="Icon" Value="{fa:Icon Trash}"/>
+                            <Setter Property="Command" Value="{Binding DataContext.DeletePackCommand, RelativeSource={RelativeSource AncestorType=Menu}}"/>
+                            <Setter Property="CommandParameter" Value="{Binding}"/>
+                        </Style>
+                    </MenuItem.ItemContainerStyle>
+                </MenuItem>
+                <MenuItem Header="_Import Questions" InputGestureText="Ctrl+I" Icon="{fa:Icon Download}"/>
                 <Separator/>
-                <MenuItem Header="E_xit" InputGestureText="Alt+F4"/>
+                <MenuItem Header="E_xit" InputGestureText="Alt+F4" Icon="{fa:Icon Times}" Command="{Binding ExitCommand}"/>
             </MenuItem>
             <MenuItem Header="_Edit">
-                <MenuItem Header="Add Question" InputGestureText="Ctrl+A"  Command="{Binding ConfigurationViewModel.AddQuestionCommand}"/>
-                <MenuItem Header="Remove Question" InputGestureText="Ctrl+R" Command="{Binding ConfigurationViewModel.RemoveQuestionCommand}"/>
-                <MenuItem Header="Pack Options" InputGestureText="Ctrl+O" Command="{Binding ConfigurationViewModel.PackOptionsCommand}"/>
+                <MenuItem Header="Add Question" InputGestureText="Ctrl+A" Icon="{fa:Icon Plus}" Command="{Binding ConfigurationViewModel.AddQuestionCommand}"/>
+                <MenuItem Header="Remove Question" InputGestureText="Ctrl+R" Icon="{fa:Icon Minus}" Command="{Binding ConfigurationViewModel.RemoveQuestionCommand}"/>
+                <MenuItem Header="Pack Options" InputGestureText="Ctrl+O" Icon="{fa:Icon Sliders}" Command="{Binding ConfigurationViewModel.PackOptionsCommand}"/>
             </MenuItem>
             <MenuItem Header="_View">
-                <MenuItem Header="Play" InputGestureText="Ctrl+P" Command="{Binding ShowPlayerViewCommand}"/>
-                <MenuItem Header="Edit" InputGestureText="Ctrl+E" Command="{Binding ShowConfigurationViewCommand}"/>
-                <MenuItem Header="Fullscreen" InputGestureText="Alt+Enter"/>
+                <MenuItem Header="Play" InputGestureText="Ctrl+P" Icon="{fa:Icon Play}" Command="{Binding ShowPlayerViewCommand}"/>
+                <MenuItem Header="Edit" InputGestureText="Ctrl+E" Icon="{fa:Icon Edit}" Command="{Binding ShowConfigurationViewCommand}"/>
+                <MenuItem Header="Fullscreen" InputGestureText="Alt+Enter" Icon="{fa:Icon expand}"/>
             </MenuItem>
         </Menu>
     </Grid>

@@ -11,10 +11,7 @@ internal class PlayerViewModel : ViewModelBase
     private readonly MainWindowViewModel? _mainWindowViewModel;
     private DispatcherTimer _timer;
     private DispatcherTimer _IconTimer;
-
-    public RelayCommand ChangePackNameCommand { get; }
     public RelayCommand AnswerCommand { get; }
-
     public QuestionPackViewModel? ActivePack { get => _mainWindowViewModel?.ActivePack; }
 
     private int _playerScore = 0;
@@ -48,18 +45,9 @@ internal class PlayerViewModel : ViewModelBase
     }
     public void RaiseActivePackChanged() => RaisePropertyChanged(nameof(ActivePack));
 
-    public string CurrentQuestionText => CurrentQuestion?.Query ?? "No question loaded";
+    public string CurrentQuestionText => CurrentQuestion?.Query ?? "";
 
-    public string QuestionProgress
-    {
-        get
-        {
-            if (ActivePack?.Questions == null || ActivePack.Questions.Count == 0)
-                return "No questions available";
-
-            return $"Question {_currentQuestionIndex + 1} of {ActivePack.Questions.Count}";
-        }
-    }
+    public string QuestionProgress => $"Question {_currentQuestionIndex + 1} of {ActivePack?.Questions.Count ?? 0}";
 
     private Visibility _answer1IconVisibility = Visibility.Collapsed;
     public Visibility Answer1IconVisibility
@@ -151,11 +139,20 @@ internal class PlayerViewModel : ViewModelBase
             RaisePropertyChanged();
         }
     }
+    private string _completionMessage = "";
+    public string CompletionMessage
+    {
+        get => _completionMessage;
+        set
+        {
+            _completionMessage = value;
+            RaisePropertyChanged();
+        }
+    }
     public PlayerViewModel(MainWindowViewModel? mainWindowViewModel)
     {
         _mainWindowViewModel = mainWindowViewModel;
 
-        ChangePackNameCommand = new RelayCommand(_ => ChangePackName(), _ => DemoText != string.Empty);
         AnswerCommand = new RelayCommand(OnAnswerSelected);
 
         _timer = new DispatcherTimer();
@@ -185,9 +182,7 @@ internal class PlayerViewModel : ViewModelBase
 
     private void LoadQuestion(int index)
     {
-        if (ActivePack?.Questions != null &&
-            index >= 0 &&
-            index < ActivePack.Questions.Count)
+        if (ActivePack?.Questions != null && index >= 0 && index < ActivePack.Questions.Count)
         {
             _currentQuestionIndex = index;
             CurrentQuestion = ActivePack.Questions[index];
@@ -281,13 +276,9 @@ internal class PlayerViewModel : ViewModelBase
         else
         {
             _timer.Stop();
-            CurrentQuestion = null;
-            Answer1 = "Quiz";
-            Answer2 = "Finished!";
-            Answer3 = $"Score: {PlayerScore}/{ActivePack?.Questions.Count ?? 0}";
-            Answer4 = "!!!";
+            CompletionMessage = $"You got {PlayerScore} out of {ActivePack?.Questions.Count ?? 0} correct!";
 
-            HideAnswerIcons();
+            _mainWindowViewModel?.ShowQuizCompleteViewCommand.Execute(null);
         }
     }
 
@@ -308,26 +299,5 @@ internal class PlayerViewModel : ViewModelBase
         Answer2 = answersList[1];
         Answer3 = answersList[2];
         Answer4 = answersList[3];
-    }
-    private string _demoText = string.Empty;
-    public string DemoText
-    {
-        get => _demoText;
-        set
-        {
-            if (SetProperty(ref _demoText, value))
-            {
-                ChangePackNameCommand.RaiseCanExecuteChanged();
-            }
-        }
-    }
-    private bool CanChangePackName(object? arg)
-    {
-        return DemoText != string.Empty;
-    }
-
-    private void ChangePackName()
-    {
-        ActivePack?.Name = DemoText;
     }
 }

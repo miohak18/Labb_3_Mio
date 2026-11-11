@@ -1,8 +1,8 @@
 ﻿namespace Labb_3_Mio.Models;
 
-internal enum Difficulty { Easy, Medium, Hard};
+public enum Difficulty { Easy, Medium, Hard }
 
-internal class QuestionPack
+public class QuestionPack
 {
     public QuestionPack(string packName, Difficulty difficulty = Difficulty.Medium, int timeLimitInSeconds = 30)
     {

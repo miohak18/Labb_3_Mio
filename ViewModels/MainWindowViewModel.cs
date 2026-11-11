@@ -1,6 +1,7 @@
 ﻿using Labb_3_Mio.Command;
 using Labb_3_Mio.Models;
 using Labb_3_Mio.Views;
+using Labb_3_Mio.Services;
 using System.Collections.ObjectModel;
 using System.Windows;
 
@@ -8,12 +9,14 @@ namespace Labb_3_Mio.ViewModels;
 
 internal class MainWindowViewModel : ViewModelBase
 {
-    public ObservableCollection<QuestionPackViewModel> Packs { get; }
+    private readonly QuestionPackService _questionPackService;
+    public ObservableCollection<QuestionPackViewModel> Packs { get; } = new();
 
 	private QuestionPackViewModel _activePack;
 
     private Visibility _visibilityConfigurationView;
     private Visibility _visiblePlayerView;
+    private Visibility _visibilityQuizCompleteView;
 
 
     public QuestionPackViewModel ActivePack
@@ -29,6 +32,12 @@ internal class MainWindowViewModel : ViewModelBase
     }
     public RelayCommand ShowPlayerViewCommand { get; }
     public RelayCommand ShowConfigurationViewCommand { get; }
+    public RelayCommand NewQuestionPackCommand { get; }
+    public RelayCommand SelectPackCommand { get; }
+    public RelayCommand DeletePackCommand { get; }
+    public RelayCommand ToggleFullscreenCommand { get; }
+    public RelayCommand ExitCommand { get; }
+    public RelayCommand ShowQuizCompleteViewCommand { get; }
 
     public Visibility VisiblePlayerView
     {
@@ -39,7 +48,6 @@ internal class MainWindowViewModel : ViewModelBase
             RaisePropertyChanged();
         }
     }
-
     public Visibility VisibilityConfigurationView
     {
         get => _visibilityConfigurationView;
@@ -49,31 +57,135 @@ internal class MainWindowViewModel : ViewModelBase
             RaisePropertyChanged();
         }
     }
+    public Visibility VisibilityQuizCompleteView
+    {
+        get => _visibilityQuizCompleteView;
+        set
+        {
+            _visibilityQuizCompleteView = value;
+            RaisePropertyChanged();
+        }
+    }
 
     public PlayerViewModel? PlayerViewModel { get; }
 	public ConfigurationViewModel? ConfigurationViewModel { get; }
 
 	public MainWindowViewModel()
     {
-		PlayerViewModel = new PlayerViewModel(this);
+        _questionPackService = new QuestionPackService();
+
+        PlayerViewModel = new PlayerViewModel(this);
 		ConfigurationViewModel = new ConfigurationViewModel(this);
 
         VisibilityConfigurationView = Visibility.Hidden;
         VisiblePlayerView = Visibility.Hidden;
+        VisibilityQuizCompleteView = Visibility.Hidden;
 
         ShowPlayerViewCommand = new RelayCommand(ShowPlayerView);
         ShowConfigurationViewCommand = new RelayCommand(ShowConfigurationView);
+        NewQuestionPackCommand = new RelayCommand(async _ => await CreateNewQuestionPack());
+        SelectPackCommand = new RelayCommand(SelectPack);
+        DeletePackCommand = new RelayCommand(async parameter => await DeletePack(parameter));
+        ToggleFullscreenCommand = new RelayCommand(ToggleFullscreen);
+        ExitCommand = new RelayCommand(ExitApplication);
+        ShowQuizCompleteViewCommand = new RelayCommand(ShowQuizCompleteView);
 
         var questionPack = new Models.QuestionPack("Mina Frågor!", Difficulty.Easy);
         questionPack.Questions.Add(new Models.Question("Vad heter sveriges huvudstad?", "Stockholm", "Oslo", "Göteborg", "London"));
         questionPack.Questions.Add(new Models.Question("Vad är 2 + 3?", "4", "5", "6", "7"));
 
         ActivePack = new QuestionPackViewModel(questionPack);
+
+        Packs.Add(ActivePack);
+
+        _ = LoadAllPacks();
+    }
+
+    private void SelectPack(object? parameter)
+    {
+        if (parameter is QuestionPackViewModel selectedPack)
+        {
+            ActivePack = selectedPack;
+            ShowConfigurationView(null);
+        }
+    }
+
+    private async Task DeletePack(object? parameter)
+    {
+        if (parameter is QuestionPackViewModel packToDelete)
+        {
+            var result = MessageBox.Show(
+                $"Are you sure you want to delete '{packToDelete.Name}'?",
+                "Confirm Delete",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                await _questionPackService.DeleteQuestionPackAsync(packToDelete.Name);
+
+                Packs.Remove(packToDelete);
+
+                if (ActivePack == packToDelete)
+                {
+                    ActivePack = Packs.FirstOrDefault();
+                }
+            }
+        }
+    }
+
+    private async Task CreateNewQuestionPack()
+    {
+        var dialog = new NewQuestionPack
+        {
+            Owner = Application.Current.MainWindow,
+            PackName = "New Question Pack",
+            Difficulty = Difficulty.Medium,
+            TimeLimitInSeconds = 30
+        };
+
+        if (dialog.ShowDialog() == true)
+        {
+            var newPack = new QuestionPack(
+                dialog.PackName,
+                dialog.Difficulty,
+                dialog.TimeLimitInSeconds
+            );
+
+            var packViewModel = new QuestionPackViewModel(newPack);
+            Packs.Add(packViewModel);
+            ActivePack = packViewModel;
+
+            await _questionPackService.SaveQuestionPackAsync(newPack);
+
+            ShowConfigurationView(null);
+        }
+    }
+
+    private async Task LoadAllPacks()
+    {
+        var loadedPacks = await _questionPackService.LoadAllQuestionPacksAsync();
+
+        foreach (var pack in loadedPacks)
+        {
+            if (!Packs.Any(p => p.Name == pack.PackName))
+            {
+                var packViewModel = new QuestionPackViewModel(pack);
+                Packs.Add(packViewModel);
+            }
+        }
+    }
+    private void ShowQuizCompleteView(object? obj)
+    {
+        VisibilityQuizCompleteView = Visibility.Visible;
+        VisiblePlayerView = Visibility.Hidden;
+        VisibilityConfigurationView = Visibility.Hidden;
     }
     private void ShowPlayerView(object? obj)
     {
         VisiblePlayerView = Visibility.Visible;
         VisibilityConfigurationView = Visibility.Hidden;
+        VisibilityQuizCompleteView = Visibility.Hidden;
 
         PlayerViewModel?.StartGame();
     }
@@ -81,5 +193,30 @@ internal class MainWindowViewModel : ViewModelBase
     {
         VisibilityConfigurationView = Visibility.Visible;
         VisiblePlayerView = Visibility.Hidden;
+        VisibilityQuizCompleteView = Visibility.Hidden;
+    }
+
+    private void ToggleFullscreen(object? obj)
+    {
+        var window = Application.Current.MainWindow;
+
+        if (window != null)
+        {
+            if (window.WindowState == WindowState.Normal)
+            {
+                window.WindowState = WindowState.Maximized;
+                window.WindowStyle = WindowStyle.None;
+            }
+            else
+            {
+                window.WindowState = WindowState.Normal;
+                window.WindowStyle = WindowStyle.SingleBorderWindow;
+            }
+        }
+    }
+
+    private void ExitApplication(object? obj)
+    {
+        Application.Current.Shutdown();
     }
 }
