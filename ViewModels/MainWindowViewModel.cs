@@ -74,6 +74,8 @@ internal class MainWindowViewModel : ViewModelBase
     {
         VisiblePlayerView = Visibility.Visible;
         VisibilityConfigurationView = Visibility.Hidden;
+
+        PlayerViewModel?.StartGame();
     }
     private void ShowConfigurationView(object? obj)
     {

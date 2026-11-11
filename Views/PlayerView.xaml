@@ -14,7 +14,12 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
+        <TextBlock Grid.Column="0"
+                       Text="{Binding ScoreDisplay}" 
+                       FontSize="30"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Left"
+                       Margin="20 0 0 0"/>
         <TextBlock Text="{Binding TimeRemaining}" 
                    FontSize="30"
                    FontWeight="Bold"
@@ -22,16 +27,15 @@
                    Margin="0 0 20 0"/>
 
         <TextBlock Grid.Row="1"
-                   Text="{Binding ActivePack.Query}"
+                   Text="{Binding CurrentQuestionText}"
                    FontWeight="SemiBold"
                    HorizontalAlignment="Center"
                    FontSize="35"
-                   Margin="0, 40 0 10"
-                   />
+                   Margin="0, 40 0 10"/>
         <TextBlock Grid.Row="2"
                    FontSize="20"
                    HorizontalAlignment="Center"
-                   Text="fråga här"/>
+                   Text="{Binding QuestionProgress}"/>
 
         <Grid Grid.Row="3" Margin="30">
             <Grid.RowDefinitions>
@@ -42,33 +46,70 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
+            
+            <Grid Grid.Row="0" Grid.Column="0">
+                <Button Content="{Binding Answer1}"
+                        Command="{Binding AnswerCommand}"
+                        CommandParameter="{Binding Answer1}"
+                        FontSize="20" Margin="20"/>
 
-            <Button Grid.Row="0" Grid.Column="0"
-            Content="{Binding Answer1}"
-            Command="{Binding AnswerCommand}"
-            CommandParameter="{Binding Answer1}"
-            FontSize="20" Margin="20"/>
+                <Image Source="{Binding RightOrWrongIcon}"
+                       Width="60"
+                       Height="60"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Bottom"
+                       Margin="0 0 30 30"
+                       Visibility="{Binding Answer1IconVisibility}"
+                       IsHitTestVisible="False"/>
+            </Grid>
 
+            <Grid Grid.Row="0" Grid.Column="1">
+                <Button Content="{Binding Answer2}"
+                        Command="{Binding AnswerCommand}"
+                        CommandParameter="{Binding Answer2}"
+                        FontSize="20" Margin="20"/>
 
-            <Button Grid.Row="0" Grid.Column="1"
-            Content="{Binding Answer2}"
-            Command="{Binding AnswerCommand}"
-            CommandParameter="{Binding Answer2}"
-            FontSize="20" Margin="20"/>
+                <Image Source="{Binding RightOrWrongIcon}"
+                       Width="60"
+                       Height="60"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Bottom"
+                       Margin="0 0 30 30"
+                       Visibility="{Binding Answer2IconVisibility}"
+                       IsHitTestVisible="False"/>
+            </Grid>
 
+            <Grid Grid.Row="1" Grid.Column="0">
+                <Button Content="{Binding Answer3}"
+                        Command="{Binding AnswerCommand}"
+                        CommandParameter="{Binding Answer3}"
+                        FontSize="20" Margin="20"/>
 
-            <Button Grid.Row="1" Grid.Column="0"
-            Content="{Binding Answer3}"
-            Command="{Binding AnswerCommand}"
-            CommandParameter="{Binding Answer3}"
-            FontSize="20" Margin="20"/>
+                <Image Source="{Binding RightOrWrongIcon}"
+                       Width="60"
+                       Height="60"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Bottom"
+                       Margin="0 0 30 30"
+                       Visibility="{Binding Answer3IconVisibility}"
+                       IsHitTestVisible="False"/>
+            </Grid>
 
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Button Content="{Binding Answer4}"
+                        Command="{Binding AnswerCommand}"
+                        CommandParameter="{Binding Answer4}"
+                        FontSize="20" Margin="20"/>
 
-            <Button Grid.Row="1" Grid.Column="1"
-            Content="{Binding Answer4}"
-            Command="{Binding AnswerCommand}"
-            CommandParameter="{Binding Answer4}"
-            FontSize="20" Margin="20"/>
+                <Image Source="{Binding RightOrWrongIcon}"
+                       Width="60"
+                       Height="60"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Bottom"
+                       Margin="0 0 30 30"
+                       Visibility="{Binding Answer4IconVisibility}"
+                       IsHitTestVisible="False"/>
+            </Grid>
         </Grid>
     </Grid>
 </UserControl>

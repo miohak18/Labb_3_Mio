@@ -22,8 +22,8 @@
                 <MenuItem Header="Pack Options" InputGestureText="Ctrl+O" Command="{Binding ConfigurationViewModel.PackOptionsCommand}"/>
             </MenuItem>
             <MenuItem Header="_View">
-                <MenuItem Header="Play" InputGestureText="Ctrl+P" Command="{Binding ShowPlayerViewCommand}"/>/>
-                <MenuItem Header="Edit" InputGestureText="Ctrl+E" Command="{Binding ShowConfigurationViewCommand}"/>/>
+                <MenuItem Header="Play" InputGestureText="Ctrl+P" Command="{Binding ShowPlayerViewCommand}"/>
+                <MenuItem Header="Edit" InputGestureText="Ctrl+E" Command="{Binding ShowConfigurationViewCommand}"/>
                 <MenuItem Header="Fullscreen" InputGestureText="Alt+Enter"/>
             </MenuItem>
         </Menu>
