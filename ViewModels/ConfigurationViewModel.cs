@@ -22,12 +22,12 @@ internal class ConfigurationViewModel :ViewModelBase
         {
             _selectedQuestion = value;
             RaisePropertyChanged();
+            RaisePropertyChanged(nameof(IsQuestionSelected));
             LoadQuestionToEditor();
             RemoveQuestionCommand.RaiseCanExecuteChanged();
             SaveQuestionCommand.RaiseCanExecuteChanged();
         }
     }
-
     private string _editQuery = string.Empty;
     public string EditQuery
     {
@@ -36,9 +36,9 @@ internal class ConfigurationViewModel :ViewModelBase
         {
             _editQuery = value;
             RaisePropertyChanged();
+            SaveQuestionCommand.RaiseCanExecuteChanged();
         }
     }
-
     private string _editCorrectAnswer = string.Empty;
     public string EditCorrectAnswer
     {
@@ -47,9 +47,9 @@ internal class ConfigurationViewModel :ViewModelBase
         {
             _editCorrectAnswer = value;
             RaisePropertyChanged();
+            SaveQuestionCommand.RaiseCanExecuteChanged();
         }
     }
-
     private string _editIncorrectAnswer1 = string.Empty;
     public string EditIncorrectAnswer1
     {
@@ -58,9 +58,9 @@ internal class ConfigurationViewModel :ViewModelBase
         {
             _editIncorrectAnswer1 = value;
             RaisePropertyChanged();
+            SaveQuestionCommand.RaiseCanExecuteChanged();
         }
     }
-
     private string _editIncorrectAnswer2 = string.Empty;
     public string EditIncorrectAnswer2
     {
@@ -69,9 +69,9 @@ internal class ConfigurationViewModel :ViewModelBase
         {
             _editIncorrectAnswer2 = value;
             RaisePropertyChanged();
+            SaveQuestionCommand.RaiseCanExecuteChanged();
         }
     }
-
     private string _editIncorrectAnswer3 = string.Empty;
     public string EditIncorrectAnswer3
     {
@@ -80,6 +80,7 @@ internal class ConfigurationViewModel :ViewModelBase
         {
             _editIncorrectAnswer3 = value;
             RaisePropertyChanged();
+            SaveQuestionCommand.RaiseCanExecuteChanged();
         }
     }
     public QuestionPackViewModel? ActivePack => _mainWindowViewModel?.ActivePack;
@@ -87,7 +88,7 @@ internal class ConfigurationViewModel :ViewModelBase
     {
         _mainWindowViewModel = mainWindowViewModel;
 
-        AddQuestionCommand = new RelayCommand(AddQuestion);
+        AddQuestionCommand = new RelayCommand(AddQuestion, CanAddQuestion);
 
         PackOptionsCommand = new RelayCommand(PackOptions);
 
@@ -100,7 +101,6 @@ internal class ConfigurationViewModel :ViewModelBase
             mainWindowViewModel.PropertyChanged += OnMainWindowPropertyChanged;
         }
     }
-
     private void OnMainWindowPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(MainWindowViewModel.ActivePack))
@@ -132,9 +132,18 @@ internal class ConfigurationViewModel :ViewModelBase
     }
     private bool CanSaveQuestion(object? obj)
     {
-        return SelectedQuestion != null && _mainWindowViewModel?.ActivePack != null;
-    }
+        if (SelectedQuestion == null || _mainWindowViewModel?.ActivePack == null)
+            return false;
 
+
+        bool isTextBoxModified = EditQuery != SelectedQuestion.Query ||
+                          EditCorrectAnswer != SelectedQuestion.CorrectAnswer ||
+                          EditIncorrectAnswer1 != SelectedQuestion.IncorrectAnswers[0] ||
+                          EditIncorrectAnswer2 != SelectedQuestion.IncorrectAnswers[1] ||
+                          EditIncorrectAnswer3 != SelectedQuestion.IncorrectAnswers[2];
+
+        return isTextBoxModified;
+    }
     private void SaveQuestion(object? obj)
     {
         if (string.IsNullOrWhiteSpace(EditQuery))
@@ -175,23 +184,29 @@ internal class ConfigurationViewModel :ViewModelBase
         SelectedQuestion.IncorrectAnswers[1] = EditIncorrectAnswer2;
         SelectedQuestion.IncorrectAnswers[2] = EditIncorrectAnswer3;
 
+        SaveQuestionCommand.RaiseCanExecuteChanged();
     }
-
     private bool CanRemoveQuestion(object? obj)
     {
         return SelectedQuestion != null && _mainWindowViewModel?.ActivePack != null;
     }
     private void AddQuestion(object? obj)
     {
+        if (_mainWindowViewModel?.ActivePack == null)
+        {
+            MessageBox.Show("Please create a question pack first.", "No Active pack",
+                MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
         var newQuestion = new Question(
             query: "Write a new question here",
-            correctAnswer: "Correct Answer goes here",
-            incorrectAnswer1: "Wrong Answer 1",
-            incorrectAnswer2: "Wrong Answer 2",
-            incorrectAnswer3: "Wrong Answer 3"
+                correctAnswer: string.Empty,
+                incorrectAnswer1: string.Empty,
+                incorrectAnswer2: string.Empty,
+                incorrectAnswer3: string.Empty
         );
 
-        _mainWindowViewModel!.ActivePack.Questions.Add(newQuestion);
+        _mainWindowViewModel.ActivePack.Questions.Add(newQuestion);
         SelectedQuestion = newQuestion;
     }
     private void PackOptions(object? obj)
@@ -212,5 +227,9 @@ internal class ConfigurationViewModel :ViewModelBase
         _mainWindowViewModel!.ActivePack.Questions.Remove(SelectedQuestion!);
         SelectedQuestion = null;
     }
-
+    private bool CanAddQuestion(object? obj)
+    {
+        return _mainWindowViewModel?.ActivePack != null;
+    }
+    public bool IsQuestionSelected => SelectedQuestion != null;
 }

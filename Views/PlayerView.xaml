@@ -14,12 +14,18 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Column="0"
-                       Text="{Binding ScoreDisplay}" 
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="1"
+                       Text="{Binding TimeRemaining}" 
                        FontSize="30"
                        FontWeight="Bold"
-                       HorizontalAlignment="Left"
-                       Margin="20 0 0 0"/>
+                       HorizontalAlignment="Right"
+                       Margin="0 0 20 0"/>
+        </Grid>
         <TextBlock Text="{Binding TimeRemaining}" 
                    FontSize="30"
                    FontWeight="Bold"
@@ -53,7 +59,7 @@
                         CommandParameter="{Binding Answer1}"
                         FontSize="20" Margin="20"/>
 
-                <Image Source="{Binding RightOrWrongIcon}"
+                <Image Source="{Binding Answer1Icon, TargetNullValue={x:Null}}"
                        Width="60"
                        Height="60"
                        HorizontalAlignment="Right"
@@ -69,7 +75,7 @@
                         CommandParameter="{Binding Answer2}"
                         FontSize="20" Margin="20"/>
 
-                <Image Source="{Binding RightOrWrongIcon}"
+                <Image Source="{Binding Answer2Icon, TargetNullValue={x:Null}}"
                        Width="60"
                        Height="60"
                        HorizontalAlignment="Right"
@@ -85,7 +91,7 @@
                         CommandParameter="{Binding Answer3}"
                         FontSize="20" Margin="20"/>
 
-                <Image Source="{Binding RightOrWrongIcon}"
+                <Image Source="{Binding Answer3Icon, TargetNullValue={x:Null}}"
                        Width="60"
                        Height="60"
                        HorizontalAlignment="Right"
@@ -101,7 +107,7 @@
                         CommandParameter="{Binding Answer4}"
                         FontSize="20" Margin="20"/>
 
-                <Image Source="{Binding RightOrWrongIcon}"
+                <Image Source="{Binding Answer4Icon, TargetNullValue={x:Null}}"
                        Width="60"
                        Height="60"
                        HorizontalAlignment="Right"

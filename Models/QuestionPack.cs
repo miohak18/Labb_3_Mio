@@ -11,7 +11,6 @@ public class QuestionPack
         TimeLimitInSeconds = timeLimitInSeconds;
         Questions = new List<Question>();
     }
-
     public string PackName { get; set; }
     public Difficulty Difficulty { get; set; }
     public int TimeLimitInSeconds { get; set; }

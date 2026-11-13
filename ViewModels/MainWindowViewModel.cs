@@ -18,13 +18,12 @@ internal class MainWindowViewModel : ViewModelBase
     private Visibility _visiblePlayerView;
     private Visibility _visibilityQuizCompleteView;
 
-
     public QuestionPackViewModel ActivePack
     {
         get => _activePack;
         set
         {
-            if (SetProperty(ref _activePack, value)) ;
+            if (SetProperty(ref _activePack, value))
             {
                 PlayerViewModel?.RaiseActivePackChanged();
             }
@@ -66,7 +65,6 @@ internal class MainWindowViewModel : ViewModelBase
             RaisePropertyChanged();
         }
     }
-
     public PlayerViewModel? PlayerViewModel { get; }
 	public ConfigurationViewModel? ConfigurationViewModel { get; }
 
@@ -77,7 +75,7 @@ internal class MainWindowViewModel : ViewModelBase
         PlayerViewModel = new PlayerViewModel(this);
 		ConfigurationViewModel = new ConfigurationViewModel(this);
 
-        VisibilityConfigurationView = Visibility.Hidden;
+        VisibilityConfigurationView = Visibility.Visible;
         VisiblePlayerView = Visibility.Hidden;
         VisibilityQuizCompleteView = Visibility.Hidden;
 
@@ -87,20 +85,22 @@ internal class MainWindowViewModel : ViewModelBase
         SelectPackCommand = new RelayCommand(SelectPack);
         DeletePackCommand = new RelayCommand(async parameter => await DeletePack(parameter));
         ToggleFullscreenCommand = new RelayCommand(ToggleFullscreen);
-        ExitCommand = new RelayCommand(ExitApplication);
+        ExitCommand = new RelayCommand(_ => Application.Current.MainWindow?.Close());
         ShowQuizCompleteViewCommand = new RelayCommand(ShowQuizCompleteView);
 
-        var questionPack = new Models.QuestionPack("Mina Frågor!", Difficulty.Easy);
-        questionPack.Questions.Add(new Models.Question("Vad heter sveriges huvudstad?", "Stockholm", "Oslo", "Göteborg", "London"));
-        questionPack.Questions.Add(new Models.Question("Vad är 2 + 3?", "4", "5", "6", "7"));
-
-        ActivePack = new QuestionPackViewModel(questionPack);
-
-        Packs.Add(ActivePack);
-
-        _ = LoadAllPacks();
+        InitializeAsync();
     }
-
+    private async void InitializeAsync()
+    {
+        await LoadAllPacks();
+    }
+    public async Task SaveAllPacksAsync()
+    {
+        foreach (var packViewModel in Packs)
+        {
+            await _questionPackService.SaveQuestionPackAsync(packViewModel.GetModel());
+        }
+    }
     private void SelectPack(object? parameter)
     {
         if (parameter is QuestionPackViewModel selectedPack)
@@ -109,7 +109,6 @@ internal class MainWindowViewModel : ViewModelBase
             ShowConfigurationView(null);
         }
     }
-
     private async Task DeletePack(object? parameter)
     {
         if (parameter is QuestionPackViewModel packToDelete)
@@ -133,7 +132,6 @@ internal class MainWindowViewModel : ViewModelBase
             }
         }
     }
-
     private async Task CreateNewQuestionPack()
     {
         var dialog = new NewQuestionPack
@@ -161,7 +159,6 @@ internal class MainWindowViewModel : ViewModelBase
             ShowConfigurationView(null);
         }
     }
-
     private async Task LoadAllPacks()
     {
         var loadedPacks = await _questionPackService.LoadAllQuestionPacksAsync();
@@ -173,6 +170,10 @@ internal class MainWindowViewModel : ViewModelBase
                 var packViewModel = new QuestionPackViewModel(pack);
                 Packs.Add(packViewModel);
             }
+        }
+        if (Packs.Any() && ActivePack == null)
+        {
+            ActivePack = Packs.First();
         }
     }
     private void ShowQuizCompleteView(object? obj)
@@ -195,7 +196,6 @@ internal class MainWindowViewModel : ViewModelBase
         VisiblePlayerView = Visibility.Hidden;
         VisibilityQuizCompleteView = Visibility.Hidden;
     }
-
     private void ToggleFullscreen(object? obj)
     {
         var window = Application.Current.MainWindow;
@@ -213,10 +213,5 @@ internal class MainWindowViewModel : ViewModelBase
                 window.WindowStyle = WindowStyle.SingleBorderWindow;
             }
         }
-    }
-
-    private void ExitApplication(object? obj)
-    {
-        Application.Current.Shutdown();
     }
 }

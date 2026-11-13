@@ -5,11 +5,17 @@ namespace Labb_3_Mio.Models;
 
 public class Question : INotifyPropertyChanged
 {
+    public Question()
+    {
+        _query = string.Empty;
+        _correctAnswer = string.Empty;
+        IncorrectAnswers = new string[3];
+    }
     public Question(string query, string correctAnswer, string incorrectAnswer1, string incorrectAnswer2, string incorrectAnswer3)
     {
         _query = query;
         _correctAnswer = correctAnswer;
-        IncorrectAnswers = new string[] { incorrectAnswer1, incorrectAnswer2, incorrectAnswer3 };
+        IncorrectAnswers = [incorrectAnswer1, incorrectAnswer2, incorrectAnswer3];
     }
 
     private string _query;

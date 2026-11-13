@@ -14,12 +14,10 @@ public class QuestionPackService
 
         _dataFolder = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "Labb3",
+            "Labb_3_Mio",
             "QuestionPacks");
 
-
         Directory.CreateDirectory(_dataFolder);
-
 
         _jsonOptions = new JsonSerializerOptions
         {
@@ -27,10 +25,9 @@ public class QuestionPackService
             PropertyNameCaseInsensitive = true
         };
     }
-
     public async Task SaveQuestionPackAsync(QuestionPack pack)
     {
-        string fileName = GetSafeFileName(pack.PackName) + ".json";
+        string fileName = ChangeInvalidSymbol(pack.PackName) + ".json";
         string filePath = Path.Combine(_dataFolder, fileName);
 
 
@@ -39,8 +36,6 @@ public class QuestionPackService
 
         await File.WriteAllTextAsync(filePath, jsonString);
     }
-
-
     public async Task<List<QuestionPack>> LoadAllQuestionPacksAsync()
     {
         var packs = new List<QuestionPack>();
@@ -51,7 +46,6 @@ public class QuestionPackService
         {
             try
             {
-
                 string jsonString = await File.ReadAllTextAsync(filePath);
 
                 var pack = JsonSerializer.Deserialize<QuestionPack>(jsonString, _jsonOptions);
@@ -61,18 +55,16 @@ public class QuestionPackService
                     packs.Add(pack);
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Console.WriteLine($"Error loading {filePath}: {ex.Message}");
+                Console.WriteLine($"Error loading {filePath}: {exception.Message}");
             }
         }
-
         return packs;
     }
-
     public async Task DeleteQuestionPackAsync(string packName)
     {
-        string fileName = GetSafeFileName(packName) + ".json";
+        string fileName = ChangeInvalidSymbol(packName) + ".json";
         string filePath = Path.Combine(_dataFolder, fileName);
 
         await Task.Run(() =>
@@ -83,8 +75,7 @@ public class QuestionPackService
             }
         });
     }
-
-    private string GetSafeFileName(string packName)
+    private string ChangeInvalidSymbol(string packName)
     {
         foreach (char c in Path.GetInvalidFileNameChars())
         {
@@ -92,6 +83,5 @@ public class QuestionPackService
         }
         return packName;
     }
-
     public string GetDataFolderPath() => _dataFolder;
 }

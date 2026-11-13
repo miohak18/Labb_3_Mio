@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Labb_3_Mio"
         xmlns:views="clr-namespace:Labb_3_Mio.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Quiz Configurator" Height="450" Width="800" FontSize="24">
     <Window.InputBindings>
         <KeyBinding Key="P" Modifiers="Ctrl" Command="{Binding ShowPlayerViewCommand}"/>
         <KeyBinding Key="E" Modifiers="Ctrl" Command="{Binding ShowConfigurationViewCommand}"/>
