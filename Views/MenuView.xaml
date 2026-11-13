@@ -43,19 +43,19 @@
                 <MenuItem Header="E_xit" InputGestureText="Alt+F4" Icon="{fa:Icon Times}" Command="{Binding ExitCommand}"/>
             </MenuItem>
             <MenuItem Header="_Edit">
-                <MenuItem Header="Add Question" InputGestureText="Ctrl+A" 
+                <MenuItem Header="_Add Question" InputGestureText="Insert" 
                           Icon="{fa:Icon Plus}" Command="{Binding ConfigurationViewModel.AddQuestionCommand}"/>
-                <MenuItem Header="Remove Question" InputGestureText="Ctrl+R" 
+                <MenuItem Header="_Remove Question" InputGestureText="Delete" 
                           Icon="{fa:Icon Minus}" Command="{Binding ConfigurationViewModel.RemoveQuestionCommand}"/>
-                <MenuItem Header="Pack Options" InputGestureText="Ctrl+O" 
+                <MenuItem Header="Pack _Options" InputGestureText="Ctrl+O" 
                           Icon="{fa:Icon Sliders}" Command="{Binding ConfigurationViewModel.PackOptionsCommand}"/>
             </MenuItem>
             <MenuItem Header="_View">
-                <MenuItem Header="Play" InputGestureText="Ctrl+P" 
+                <MenuItem Header="_Play" InputGestureText="Ctrl+P" 
                           Icon="{fa:Icon Play}" Command="{Binding ShowPlayerViewCommand}"/>
-                <MenuItem Header="Edit" InputGestureText="Ctrl+E" 
+                <MenuItem Header="_Edit" InputGestureText="Ctrl+E" 
                           Icon="{fa:Icon Edit}" Command="{Binding ShowConfigurationViewCommand}"/>
-                <MenuItem Header="Fullscreen" InputGestureText="Alt+Enter" 
+                <MenuItem Header="_Fullscreen" InputGestureText="Alt+Enter" 
                           Icon="{fa:Icon expand}"/>
             </MenuItem>
         </Menu>

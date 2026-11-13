@@ -12,6 +12,7 @@ internal class PlayerViewModel : ViewModelBase
     private DispatcherTimer _timer;
     private DispatcherTimer _IconTimer;
     private List<Question> _shuffledQuestions;
+    private bool _isShowingResult;
     public RelayCommand AnswerCommand { get; }
     public QuestionPackViewModel? ActivePack { get => _mainWindowViewModel?.ActivePack; }
 
@@ -224,6 +225,30 @@ internal class PlayerViewModel : ViewModelBase
         Answer3Icon = null;
         Answer4Icon = null;
     }
+
+    private void ShowCorrectAnswerIcon()
+    {
+        if (CurrentQuestion?.CorrectAnswer == Answer1)
+        {
+            Answer1IconVisibility = Visibility.Visible;
+            Answer1Icon = "/Images/correctanswer.png";
+        }
+        else if (CurrentQuestion?.CorrectAnswer == Answer2)
+        {
+            Answer2IconVisibility = Visibility.Visible;
+            Answer2Icon = "/Images/correctanswer.png";
+        }
+        else if (CurrentQuestion?.CorrectAnswer == Answer3)
+        {
+            Answer3IconVisibility = Visibility.Visible;
+            Answer3Icon = "/Images/correctanswer.png";
+        }
+        else if (CurrentQuestion?.CorrectAnswer == Answer4)
+        {
+            Answer4IconVisibility = Visibility.Visible;
+            Answer4Icon = "/Images/correctanswer.png";
+        }
+    }
     private void LoadQuestion(int index)
     {
         if (_shuffledQuestions != null && index >= 0 && index < _shuffledQuestions.Count)
@@ -232,6 +257,7 @@ internal class PlayerViewModel : ViewModelBase
             CurrentQuestion = _shuffledQuestions[index];
             ShuffleAnswers(CurrentQuestion);
             ResetTimer();
+            _isShowingResult = false;
 
             HideAnswerIcons();
         }
@@ -252,13 +278,18 @@ internal class PlayerViewModel : ViewModelBase
     }
     private void Timer_Tick(object? sender, EventArgs e)
     {
-        if (TimeRemaining > 0)
+        if (TimeRemaining > 1)
         {
             TimeRemaining--;
         }
         else
         {
-            MoveToNextQuestion();
+            TimeRemaining = 0;
+            _timer.Stop();
+            _isShowingResult = true;
+            HideAnswerIcons();
+            ShowCorrectAnswerIcon();
+            _IconTimer.Start();
         }
     }
     private void IconTimer_Tick(object? sender, EventArgs e)
@@ -268,14 +299,16 @@ internal class PlayerViewModel : ViewModelBase
 
 
         HideAnswerIcons();
+        _isShowingResult = false;
 
         MoveToNextQuestion();
     }
     private void OnAnswerSelected(object? selectedAnswer)
     {
-        if (selectedAnswer is string answer && CurrentQuestion != null)
+        if (!_isShowingResult && selectedAnswer is string answer && CurrentQuestion != null)
         {
             _timer.Stop();
+            _isShowingResult = true;
 
             bool isCorrect = answer == CurrentQuestion.CorrectAnswer;
 
@@ -304,26 +337,7 @@ internal class PlayerViewModel : ViewModelBase
 
             if (!isCorrect)
             {
-                if (CurrentQuestion.CorrectAnswer == Answer1)
-                {
-                    Answer1IconVisibility = Visibility.Visible;
-                    Answer1Icon = "/Images/correctanswer.png";
-                }
-                else if (CurrentQuestion.CorrectAnswer == Answer2)
-                {
-                    Answer2IconVisibility = Visibility.Visible;
-                    Answer2Icon = "/Images/correctanswer.png";
-                }
-                else if (CurrentQuestion.CorrectAnswer == Answer3)
-                {
-                    Answer3IconVisibility = Visibility.Visible;
-                    Answer3Icon = "/Images/correctanswer.png";
-                }
-                else if (CurrentQuestion.CorrectAnswer == Answer4)
-                {
-                    Answer4IconVisibility = Visibility.Visible;
-                    Answer4Icon = "/Images/correctanswer.png";
-                }
+                ShowCorrectAnswerIcon();
             }
 
             if (isCorrect) PlayerScore++;
